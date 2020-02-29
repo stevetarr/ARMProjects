@@ -17,6 +17,7 @@
         .equ  SWI_Wait, 0x6d           @ Waits a second, in miliseconds.
         .equ  SWI_LED, 0x200           @ Lights up the 8 segment LED.
         .equ  SWI_Pressed, 0x202       @ Checks to see if one of the black buttons has been pressed.
+        .equ  SWI_LCD, 0x204           @ Displays to the LCD screen
 
         @ These .equ statements correspond to the LED segments we will illuminate.
         .equ  SEG_A, 0x80
@@ -69,9 +70,32 @@ last:
         mov   r4, #2
         ldr   r0,[r2, r4, lsl#2]
         swi   SWI_LED
-        mov   r0, #0                @ Since this is the last letter reset the variable values
         mov   r4, #0                @ so that you can loop again from the start.
         sub   r4, #1                @ Set the value to -1, so when wait increments it it will start at 0.
+        b     lcd
+
+lcd:
+        mov   r0, #1
+        mov   r1, #1
+        ldr   r2, =message_one
+        swi   SWI_LCD
+        mov   r0, #1
+        mov   r1, #4
+        ldr   r2, =message_two
+        swi   SWI_LCD
+        mov   r0, #1
+        mov   r1, #7
+        ldr   r2, =message_three
+        swi   SWI_LCD
+        mov   r0, #1
+        mov   r1, #10
+        ldr   r2, =message_four
+        swi   SWI_LCD
+        mov   r0, #1
+        mov   r1, #11
+        ldr   r2, =message_five
+        swi   SWI_LCD
+        mov   r0, #0
         swi   SWI_Wait
         ldr   r1, =2000             @ Wait twice as long since this is the last letter
         add   r1, r1, r0
@@ -84,3 +108,14 @@ letters:
         .word SEG_A|SEG_G|SEG_F|SEG_C|SEG_D       @ S
         .word SEG_A|SEG_G|SEG_E|SEG_D|SEG_F       @ E
         .word SEG_A|SEG_G|SEG_E|SEG_F|SEG_B|SEG_P @ R
+
+message_one:
+        .asciz  "Underinflate the Football\n"
+message_two:
+        .asciz  "Videotape Other Team Signals\n"
+message_three:
+        .asciz  "Lie About the Injured Reserve List\n"
+message_four:
+        .asciz  "Secretly record the opposing teams\n"
+message_five:
+        .asciz  "practices\n"
