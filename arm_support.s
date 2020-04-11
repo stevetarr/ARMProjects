@@ -10,6 +10,8 @@
 @
 @ ============================================================
 
+@ Input: the 4x4 array to be rotated in r0
+@ Rotates the array 90 degrees to the left
   .text
   .global rotate
   .type rotate, %function
@@ -17,6 +19,7 @@ rotate:
         MOV R4, #0
         MOV R5, #0
 
+        @ Swaps 0 to 12, 3 to 0, 15 to 3, and 12 to 15
         LDRB R4, [R0]
         LDRB R5, [R0, #3]
         STRB R5, [R0]
@@ -26,6 +29,7 @@ rotate:
         STRB R5, [R0, #15]
         STRB R4, [R0, #12]
 
+        @ Swaps 1 to 8, 7 to 1, 14 to 7, and 8 to 14
         LDRB R4, [R0, #1]
         LDRB R5, [R0, #7]
         STRB R5, [R0, #1]
@@ -35,6 +39,7 @@ rotate:
         STRB R5, [R0, #14]
         STRB R4, [R0, #8]
 
+        @ Swaps 2 to 4, 11 to 2, 13 to 11, and 4 to 13
         LDRB R4, [R0, #2]
         LDRB R5, [R0, #11]
         STRB R5, [R0, #2]
@@ -44,6 +49,7 @@ rotate:
         STRB R5, [R0, #13]
         STRB R4, [R0, #4]
 
+        @ Swaps 5 to 9, 6 to 5, 10 to 6, and 9 to 10
         LDRB R4, [R0, #5]
         LDRB R5, [R0, #6]
         STRB R5, [R0, #5]
@@ -53,22 +59,32 @@ rotate:
         STRB R5, [R0, #10]
         STRB R4, [R0, #9]
 
-
+        @ Returns from rotate to the provided main
         MOV PC,LR
 
+@ Inputs: the char in r0, and the 4x4 array in r1
+@ Outputs: the changed char value in r0
   .text
   .global encrypt
   .type encrypt, %function
 encrypt:
           @ Using R6 through R9 for the 4 counters
           MOV R4, #0
+
+          @ Temp for current char value
           MOV R5, #0
+
+          @ Row 0 Counter
           MOV R6, #0
+          @ Row 1 Counter
           MOV R7, #0
+          @ Row 2 Counter
           MOV R8, #0
+          @ Row 3 Counter
           MOV R9, #0
 
-          @ Not beautiful, but it works
+          @ Not beautiful, but it works by going char by
+          @ char and adding 1 to corresponding counters
           LDRB R5, [R1]
           CMP R5, #0x53
           ADDEQ R6, #1
@@ -121,30 +137,39 @@ encrypt:
           MOV R5, #0
           B comp_one
 
+@ Evaluates the first column, checks bits if the column
+@ count is odd
 comp_one:
           CMP R6, #1
           BEQ first
           CMP R6, #3
           BEQ first
 
+@ Evaluates the second column, checks bits if the column
+@ count is odd
 comp_two:
           CMP R7, #1
           BEQ second
           CMP R7, #3
           BEQ second
 
+@ Evaluates the third column, checks bits if the column
+@ count is odd
 comp_three:
           CMP R8, #1
           BEQ third
           CMP R8, #3
           BEQ third
 
+@ Evaluates the fourth column, checks bits if the column
+@ count is odd
 comp_four:
           CMP R9, #1
           BEQ fourth
           CMP R9, #3
           BEQ fourth
 
+          @ Returns from rotate to the provided main
           MOV PC, LR
 
 first:
@@ -221,4 +246,5 @@ fourth:
           CMP R5, #1
           EOREQ R0, #0x03
 
+          @ Returns from rotate to the provided main
           MOV PC, LR
