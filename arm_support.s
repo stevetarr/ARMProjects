@@ -17,82 +17,42 @@ rotate:
         MOV R4, #0
         MOV R5, #0
 
-        @ Reverse line 0
         LDRB R4, [R0]
         LDRB R5, [R0, #3]
         STRB R5, [R0]
-        STRB R4, [R0, #3]
-        LDRB R4, [R0, #1]
-        LDRB R5, [R0, #2]
-        STRB R5, [R0, #1]
-        STRB R4, [R0, #2]
+        LDRB R5, [R0, #15]
+        STRB R5, [R0, #3]
+        LDRB R5, [R0, #12]
+        STRB R5, [R0, #15]
+        STRB R4, [R0, #12]
 
-        @ Reverse line 1
-        LDRB R4, [R0, #4]
+        LDRB R4, [R0, #1]
         LDRB R5, [R0, #7]
-        STRB R5, [R0, #4]
-        STRB R4, [R0, #7]
+        STRB R5, [R0, #1]
+        LDRB R5, [R0, #14]
+        STRB R5, [R0, #7]
+        LDRB R5, [R0, #8]
+        STRB R5, [R0, #14]
+        STRB R4, [R0, #8]
+
+        LDRB R4, [R0, #2]
+        LDRB R5, [R0, #11]
+        STRB R5, [R0, #2]
+        LDRB R5, [R0, #13]
+        STRB R5, [R0, #11]
+        LDRB R5, [R0, #4]
+        STRB R5, [R0, #13]
+        STRB R4, [R0, #4]
+
         LDRB R4, [R0, #5]
         LDRB R5, [R0, #6]
         STRB R5, [R0, #5]
-        STRB R4, [R0, #6]
-
-        @ Reverse line 2
-        LDRB R4, [R0, #8]
-        LDRB R5, [R0, #11]
-        STRB R5, [R0, #8]
-        STRB R4, [R0, #11]
-        LDRB R4, [R0, #9]
         LDRB R5, [R0, #10]
-        STRB R5, [R0, #9]
-        STRB R4, [R0, #10]
-
-        @ Reverse line 3
-        LDRB R4, [R0, #12]
-        LDRB R5, [R0, #15]
-        STRB R5, [R0, #12]
-        STRB R4, [R0, #15]
-        LDRB R4, [R0, #13]
-        LDRB R5, [R0, #14]
-        STRB R5, [R0, #13]
-        STRB R4, [R0, #14]
-
-        @ Remaining Swaps
-        @ (0,1) <-> (1,0)
-        LDRB R4, [R0, #1]
-        LDRB R5, [R0, #4]
-        STRB R5, [R0, #1]
-        STRB R4, [R0, #4]
-
-        @ (0,2) <-> (2,0)
-        LDRB R4, [R0, #2]
-        LDRB R5, [R0, #8]
-        STRB R5, [R0, #2]
-        STRB R4, [R0, #8]
-
-        @ (0,3) <-> (3,0)
-        LDRB R4, [R0, #3]
-        LDRB R5, [R0, #12]
-        STRB R5, [R0, #3]
-        STRB R4, [R0, #12]
-
-        @ (1,2) <-> (2,1)
-        LDRB R4, [R0, #6]
-        LDRB R5, [R0, #9]
         STRB R5, [R0, #6]
+        LDRB R5, [R0, #9]
+        STRB R5, [R0, #10]
         STRB R4, [R0, #9]
 
-        @ (1,3) <-> (3,1)
-        LDRB R4, [R0, #7]
-        LDRB R5, [R0, #13]
-        STRB R5, [R0, #7]
-        STRB R4, [R0, #13]
-
-        @ (2,3) <-> (3,2)
-        LDRB R4, [R0, #11]
-        LDRB R5, [R0, #14]
-        STRB R5, [R0, #11]
-        STRB R4, [R0, #14]
 
         MOV PC,LR
 
@@ -108,87 +68,57 @@ encrypt:
           MOV R8, #0
           MOV R9, #0
 
-          @ Char 0
+          @ Not beautiful, but it works
           LDRB R5, [R1]
           CMP R5, #0x53
           ADDEQ R6, #1
-          ADD R1, #1
-          @ Char 1
-          LDRB R5, [R1]
+          LDRB R5, [R1, #1]
           CMP R5, #0x53
           ADDEQ R7, #1
-          ADD R1, #1
-          @ Char 2
-          LDRB R5, [R1]
+          LDRB R5, [R1, #2]
           CMP R5, #0x53
           ADDEQ R8, #1
-          ADD R1, #1
-          @ Char 3
-          LDRB R5, [R1]
+          LDRB R5, [R1, #3]
           CMP R5, #0x53
           ADDEQ R9, #1
-          ADD R1, #1
-          @ Char 4
-          LDRB R5, [R1]
+          LDRB R5, [R1, #4]
           CMP R5, #0x53
           ADDEQ R6, #1
-          ADD R1, #1
-          @ Char 5
-          LDRB R5, [R1]
+          LDRB R5, [R1, #5]
           CMP R5, #0x53
           ADDEQ R7, #1
-          ADD R1, #1
-          @ Char 6
-          LDRB R5, [R1]
+          LDRB R5, [R1, #6]
           CMP R5, #0x53
           ADDEQ R8, #1
-          ADD R1, #1
-          @ Char 7
-          LDRB R5, [R1]
+          LDRB R5, [R1, #7]
           CMP R5, #0x53
           ADDEQ R9, #1
-          ADD R1, #1
-          @ Char 8
-          LDRB R5, [R1]
+          LDRB R5, [R1, #8]
           CMP R5, #0x53
           ADDEQ R6, #1
-          ADD R1, #1
-          @ Char 9
-          LDRB R5, [R1]
+          LDRB R5, [R1, #9]
           CMP R5, #0x53
           ADDEQ R7, #1
-          ADD R1, #1
-          @ Char 10
-          LDRB R5, [R1]
+          LDRB R5, [R1, #10]
           CMP R5, #0x53
           ADDEQ R8, #1
-          ADD R1, #1
-          @ Char 11
-          LDRB R5, [R1]
+          LDRB R5, [R1, #11]
           CMP R5, #0x53
           ADDEQ R9, #1
-          ADD R1, #1
-          @ Char 12
-          LDRB R5, [R1]
+          LDRB R5, [R1, #12]
           CMP R5, #0x53
           ADDEQ R6, #1
-          ADD R1, #1
-          @ Char 13
-          LDRB R5, [R1]
+          LDRB R5, [R1, #13]
           CMP R5, #0x53
           ADDEQ R7, #1
-          ADD R1, #1
-          @ Char 14
-          LDRB R5, [R1]
+          LDRB R5, [R1, #14]
           CMP R5, #0x53
           ADDEQ R8, #1
-          ADD R1, #1
-          @ Char 15
-          LDRB R5, [R1]
+          LDRB R5, [R1, #15]
           CMP R5, #0x53
           ADDEQ R9, #1
-          MOV R5, #0
 
+          MOV R5, #0
           B comp_one
 
 comp_one:
